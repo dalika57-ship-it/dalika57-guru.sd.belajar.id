@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UJI COBA TES KEMAMPUAN AKADEMIK (TKA) - UPT SD NEGERI BANYUBANG 2027</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Pengaturan Font Spesifik */
+        @font-face {
+            font-family: 'Arial Nova Cond';
+            src: local('Arial Nova Cond'), local('Arial Narrow'), local('Arial');
+        }
+
+        .title-font {
+            font-family: 'Arial Nova Cond', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        /* Arial ukuran 11pt (14.67px) untuk stimulus, pokok soal, petunjuk soal, dan opsi */
+        .exam-font {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+        }
+
+        /* Arial ukuran 8pt (10.67px) miring untuk sumber stimulus */
+        .source-font {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 8pt;
+            font-style: italic;
+        }
+
+        .source-font a {
+            color: #2563eb; /* Biru untuk link web */
+            text-decoration: underline;
+        }
+
+        /* Kustomisasi Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .no-select {
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col justify-between font-sans relative">
+
+    <!-- ==================== 1. HALAMAN AWAL (LOGIN / IDENTITAS) ==================== -->
+    <div id="page-login" class="flex-grow flex items-center justify-center p-4 sm:p-6">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 sm:p-10 w-full max-w-lg relative overflow-hidden">
+            <!-- Garis Dekorasi Atas -->
+            <div class="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500"></div>
+
+            <!-- Judul Rata Tengah dengan Font Arial Nova Cond -->
+            <div class="text-center mb-8">
+                <h1 class="title-font text-2xl sm:text-3xl font-extrabold text-blue-900 leading-snug tracking-wide">
+                    UJI COBA TES KEMAMPUAN AKADEMIK (TKA)
+                </h1>
+                <h2 class="title-font text-lg sm:text-xl font-bold text-slate-700 mt-1 tracking-wide">
+                    UPT SD NEGERI BANYUBANG
+                </h2>
+                <h3 class="title-font text-base sm:text-lg font-semibold text-blue-600 mt-0.5 tracking-wide">
+                    TAHUN 2027
+                </h3>
+                <div class="w-20 h-1 bg-blue-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- Form Identitas Peserta -->
+            <form id="form-login" onsubmit="handleLogin(event)" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Lengkap</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" id="input-nama" required placeholder="Masukkan nama lengkap peserta" 
+                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">NISN</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                            <i class="fa-solid fa-id-card"></i>
+                        </span>
+                        <input type="text" id="input-nisn" required placeholder="Masukkan NISN peserta" pattern="[0-9]+" title="Masukkan hanya angka NISN"
+                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Token</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                            <i class="fa-solid fa-key"></i>
+                        </span>
+                        <input type="text" id="input-token" required placeholder="Masukkan token ujian"
+                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition uppercase text-sm font-bold tracking-wider">
+                    </div>
+                </div>
+
+                <!-- Peringatan Token Salah -->
+                <div id="error-alert" class="hidden bg-red-50 border-l-4 border-red-500 p-3.5 rounded-r-lg text-red-700 text-xs sm:text-sm flex items-start gap-2.5">
+                    <i class="fa-solid fa-triangle-exclamation mt-0.5 text-red-600"></i>
+                    <span id="error-text" class="font-medium">Maaf, token yang Anda masukkan salah. Silakan ulangi Kembali.</span>
+                </div>
+
+                <button type="submit" 
+                    class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 text-sm sm:text-base">
+                    <span>Masuk Ujian</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Pojok Kanan Bawah Halaman Awal -->
+    <div id="footer-watermark" class="p-4 text-right text-xs sm:text-sm font-semibold text-slate-600">
+        Dibuat oleh: <span class="text-blue-800 font-bold">DALIKA</span>
+    </div>
+
+    <!-- ==================== 2. POP-UP PETUNJUK PENGERJAAN ==================== -->
+    <div id="modal-petunjuk" class="fixed inset-0 bg-slate-900/65 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 sm:p-8 transform transition-all relative flex flex-col">
+            <!-- Header Modal -->
+            <div class="flex items-center gap-3 border-b border-slate-200 pb-4 mb-4">
+                <div class="w-11 h-11 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg flex-shrink-0">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">Konfirmasi Data & Petunjuk Ujian</h3>
+                    <p class="text-xs text-slate-500">Pastikan data diri Anda sudah benar sebelum memulai.</p>
+                </div>
+            </div>
+
+            <!-- Identitas Peserta yang Diinput -->
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-5 space-y-1.5 text-sm text-slate-700">
+                <div class="flex items-center">
+                    <span class="w-28 font-semibold text-slate-500">Nama Lengkap</span>
+                    <span class="mr-2 font-bold">:</span>
+                    <span id="confirm-nama" class="font-bold text-blue-900"></span>
+                </div>
+                <div class="flex items-center">
+                    <span class="w-28 font-semibold text-slate-500">NISN</span>
+                    <span class="mr-2 font-bold">:</span>
+                    <span id="confirm-nisn" class="font-bold text-slate-800"></span>
+                </div>
+            </div>
+
+            <!-- Petunjuk Pengerjaan Soal -->
+            <div class="space-y-3 mb-7">
+                <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-blue-600"></i> Petunjuk Pengerjaan Soal:
+                </h4>
+                <ol class="list-decimal list-inside text-sm text-slate-700 space-y-2 leading-relaxed pl-1">
+                    <li>Soal terdiri dari <strong>30 butir soal</strong> dengan waktu mengerjakan maksimal <strong>75 menit</strong>.</li>
+                    <li>Periksa Kembali jawaban Anda. Pastikan Anda menjawab dengan benar.</li>
+                </ol>
+                <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-center py-2.5 rounded-xl text-sm mt-3">
+                    Selamat mengerjakan!
+                </div>
+            </div>
+
+            <!-- Tombol di Pojok Kanan Bawah Modal -->
+            <div class="flex justify-end mt-auto pt-2">
+                <button onclick="startExam()" 
+                    class="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-2 text-xs sm:text-sm">
+                    <span>Saya Mengerti, Saya Siap Mengerjakan</span>
+                    <i class="fa-solid fa-play"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 3. HALAMAN UJIAN (SOAL 1 S.D. 30) ==================== -->
+    <div id="page-exam" class="hidden min-h-screen flex flex-col bg-slate-100">
+        <!-- Top Header -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-700 rounded-xl text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1 class="title-font text-base sm:text-lg font-extrabold text-blue-900 leading-tight">
+                        UJI COBA TES KEMAMPUAN AKADEMIK (TKA)
+                    </h1>
+                    <p class="text-xs text-slate-500 font-medium">UPT SD NEGERI BANYUBANG • TAHUN 2027</p>
+                </div>
+            </div>
+
+            <!-- Info Peserta & Timer -->
+            <div class="flex items-center gap-3 sm:gap-5">
+                <div class="hidden md:block text-right">
+                    <div id="exam-user-nama" class="text-xs font-bold text-slate-800"></div>
+                    <div id="exam-user-nisn" class="text-[11px] text-slate-500"></div>
+                </div>
+
+                <!-- Timer Hitung Mundur 75 Menit -->
+                <div class="flex items-center gap-2 bg-rose-50 border border-rose-200 px-3.5 py-1.5 rounded-xl text-rose-700 font-mono font-bold text-sm sm:text-base shadow-inner">
+                    <i class="fa-regular fa-clock"></i>
+                    <span id="timer-display">75:00</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Area Konten Utama Ujian -->
+        <div class="flex-grow max-w-7xl w-full mx-auto p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+            
+            <!-- Kolom Kiri (3 Bagian): Area Tampilan Soal -->
+            <div class="lg:col-span-3 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-7 flex flex-col justify-between min-h-[520px]">
+                <div>
+                    <!-- Header Nomor Soal -->
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3.5 mb-5">
+                        <span class="bg-blue-600 text-white text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-lg shadow-sm">
+                            Soal Nomor <span id="current-q-num">1</span>
+                        </span>
+                        <span id="q-type-badge" class="text-xs font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-3 py-1 rounded-lg">
+                            Pilihan Ganda
+                        </span>
+                    </div>
+
+                    <!-- STIMULUS BACAAN (Font Arial 11pt, Sumber Arial 8pt Miring, Link Biru) -->
+                    <div id="stimulus-container" class="hidden mb-6 p-4 sm:p-5 bg-slate-50 rounded-xl border border-slate-200 exam-font">
+                        <h4 id="stimulus-title" class="font-bold text-slate-900 mb-2.5 text-center" style="font-size: 12pt;"></h4>
+                        <div id="stimulus-text" class="text-slate-800 space-y-2.5 text-justify"></div>
+                        <div id="stimulus-source" class="source-font mt-3.5 text-slate-500 border-t border-slate-200 pt-2"></div>
+                    </div>
+
+                    <!-- POKOK SOAL & PETUNJUK SOAL (Font Arial 11pt) -->
+                    <div id="question-prompt" class="exam-font font-semibold text-slate-900 mb-5">
+                        <!-- Diisi via JavaScript -->
+                    </div>
+
+                    <!-- OPSI JAWABAN (Font Arial 11pt) -->
+                    <div id="options-container" class="exam-font space-y-3 mb-8">
+                        <!-- Diisi via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- TOMBOL NAVIGASI BAWAH SOAL ("Lewati", "Ragu-ragu", dan "Selesai" di soal terakhir) -->
+                <div class="pt-4 border-t border-slate-200 flex items-center justify-between gap-3 flex-wrap">
+                    <div class="flex items-center gap-2.5">
+                        <!-- Tombol Ragu-ragu -->
+                        <button onclick="toggleDoubt()" id="btn-doubt" class="px-4 py-2.5 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold rounded-xl text-xs sm:text-sm transition flex items-center gap-2 border border-amber-300 shadow-sm">
+                            <i class="fa-solid fa-flag"></i>
+                            <span id="doubt-label">Ragu-ragu</span>
+                        </button>
+
+                        <!-- Tombol Lewati -->
+                        <button onclick="nextQuestion()" id="btn-lewati" class="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-xl text-xs sm:text-sm transition flex items-center gap-2">
+                            <span>Lewati</span>
+                            <i class="fa-solid fa-forward-step"></i>
+                        </button>
+                    </div>
+
+                    <!-- Tombol Selesai (Muncul di kanan bawah pada soal terakhir / nomor 30) -->
+                    <div class="ml-auto">
+                        <button onclick="confirmFinishExam()" id="btn-finish" class="hidden px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs sm:text-sm transition shadow-md flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Selesai</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolom Kanan Atas (1 Bagian): Menu Nomor Soal 1 s.d. 30 -->
+            <div class="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-5 sticky top-20">
+                <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-2.5">
+                    <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-table-cells text-blue-600"></i>
+                        <span>DAFTAR NOMOR SOAL</span>
+                    </h3>
+                </div>
+
+                <!-- Keterangan Warna Status Soal -->
+                <div class="grid grid-cols-2 gap-2 text-[11px] mb-4 text-slate-600 font-medium bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3.5 h-3.5 bg-emerald-500 rounded shadow-xs"></span> Sudah dikerjakan
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3.5 h-3.5 bg-amber-400 rounded shadow-xs"></span> Ragu-ragu
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3.5 h-3.5 bg-blue-600 rounded shadow-xs"></span> Sedang dibuka
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3.5 h-3.5 bg-slate-200 rounded shadow-xs"></span> Belum dikerjakan
+                    </div>
+                </div>
+
+                <!-- Grid Tombol Nomor 1 - 30 -->
+                <div id="grid-nav" class="grid grid-cols-5 gap-2">
+                    <!-- Diisi via JavaScript -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==================== 4. HALAMAN AKHIR / HASIL NILAI ==================== -->
+    <div id="page-result" class="hidden min-h-screen flex items-center justify-center p-4 bg-slate-100">
+        <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 p-6 sm:p-10 max-w-lg w-full text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-600"></div>
+
+            <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-5 shadow-inner">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mb-2">Selamat!</h1>
+            <p class="text-sm sm:text-base text-slate-600 leading-relaxed mb-6">
+                Anda telah menyelesaikan Uji Coba Tes Kemampuan Akademik (TKA). Nilai yang anda dapatkan adalah
+            </p>
+
+            <!-- Kotak Nilai Hasil Pengerjaan (2 Desimal) -->
+            <div class="bg-gradient-to-b from-blue-50 to-slate-50 border border-blue-200 rounded-2xl p-6 mb-6 shadow-inner">
+                <div id="result-score" class="text-5xl sm:text-6xl font-black text-blue-700 tracking-tight">
+                    0.00
+                </div>
+                <div class="text-xs text-slate-500 mt-3 font-medium">
+                    Jawaban Benar: <span id="result-correct" class="font-bold text-emerald-600">0</span> dari 30 soal
+                </div>
+            </div>
+
+            <!-- Ringkasan Identitas Peserta -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-left text-xs sm:text-sm text-slate-700 mb-6 space-y-1.5">
+                <div class="flex"><span class="w-24 font-semibold text-slate-500">Nama</span><span>: <strong id="result-nama"></strong></span></div>
+                <div class="flex"><span class="w-24 font-semibold text-slate-500">NISN</span><span>: <strong id="result-nisn"></strong></span></div>
+                <div class="flex"><span class="w-24 font-semibold text-slate-500">Sekolah</span><span>: UPT SD NEGERI BANYUBANG</span></div>
+            </div>
+
+            <button onclick="window.location.reload()" 
+                class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition shadow-md flex items-center justify-center gap-2 text-sm">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span>Ulangi Uji Coba</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL KONFIRMASI SELESAI CUSTOM (TANPA ALERT/CONFIRM BAWAAN) ==================== -->
+    <div id="modal-confirm-finish" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 text-center">
+            <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-3">
+                <i class="fa-solid fa-circle-question"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-2">Selesaikan Ujian?</h3>
+            <p class="text-sm text-slate-600 mb-6">
+                Apakah Anda yakin telah memeriksa kembali semua jawaban dan ingin mengakhiri ujian sekarang?
+            </p>
+            <div class="flex items-center justify-center gap-3">
+                <button onclick="closeConfirmModal()" class="flex-1 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-xl text-sm transition">
+                    Periksa Kembali
+                </button>
+                <button onclick="calculateAndFinishExam()" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm transition shadow-md">
+                    Ya, Selesai
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIKA UJIAN ==================== -->
+    <script>
+        // STATE GLOBAL
+        let studentData = { nama: '', nisn: '' };
+        let currentQuestionIndex = 0;
+        let timerInterval = null;
+        let timeLeft = 75 * 60; // 75 menit dalam detik
+
+        // Penyimpanan Jawaban & Status Ragu-ragu (30 soal)
+        let userAnswers = Array(30).fill(null);
+        let userDoubts = Array(30).fill(false);
+
+        // STIMULUS BACAAN UNTUK SOAL 1, 2, DAN 3 (173 Kata)
+        const STIMULUS_BUDI = {
+            title: "Tenda Sangkar Burung dan Sepeda Gantung Budi",
+            text: `
+                <p>The Lodge Maribaya sangat indah. Tempat ini ada di Lembang. Udara di sana sangat sejuk. Hutan pinus tumbuh sangat rimbun.</p>
+                <p>Budi mengunjungi tempat wisata ini. Budi mencoba wahana Mountain Swing. Wahana ini adalah ayunan tinggi. Budi merasa sangat senang sekali. Ayunan ini melayang tinggi. Pemandangan jurang terlihat sangat jelas.</p>
+                <p>Budi juga mencoba wahana Zip Bike. Zip Bike adalah sepeda gantung. Sepeda meluncur di atas tali. Tali baja ini sangat kuat. Petugas memasang alat pengaman tubuh. Keamanan wahana ini sangat terjamin.</p>
+                <p>Budi lalu melihat area glamping. Glamping adalah kegiatan berkemah mewah. Tenda menginap ini sangat unik. Bentuk tenda seperti sangkar burung. Fasilitas di dalam tenda lengkap. Tempat tidur sangat terasa nyaman.</p>
+                <p>Budi belajar banyak hal baru. Kosakata baru menambah pengetahuan Budi. Liburan ini memberikan pengalaman berharga. Budi belajar keberanian di sana. Budi juga menyayangi alam sekitar. Tempat ini sangat menyenangkan sekali.</p>
+            `,
+            source: 'Sumber: Adaptasi Informasi Wisata Lembang - <a href="https://thelodgemaribaya.com" target="_blank">https://thelodgemaribaya.com</a>'
+        };
+
+        // DATABASE 30 SOAL UJI COBA TKA KELAS 6 SD
+        const questionsDB = [
+            // SOAL 1: Pilihan Ganda (4 Opsi)
+            {
+                id: 1,
+                type: 'MC',
+                stimulus: STIMULUS_BUDI,
+                prompt: "Berdasarkan teks deskripsi di atas, kelompok kata yang semuanya merupakan kosakata khusus dalam bidang pariwisata adalah ...",
+                options: [
+                    { key: 'A', text: "glamping, wahana, dan Zip Bike" },
+                    { key: 'B', text: "tempat tidur, menginap, dan wisata" },
+                    { key: 'C', text: "udara sejuk, hutan pinus, dan liburan" },
+                    { key: 'D', text: "pengalaman, keberanian, dan fasilitas" }
+                ],
+                correctKey: 'A'
+            },
+
+            // SOAL 2: MCMA (Pilihan Ganda Kompleks - 3 Opsi, Pilih 2 Benar)
+            {
+                id: 2,
+                type: 'MCMA',
+                stimulus: STIMULUS_BUDI,
+                prompt: "Berdasarkan paragraf ketiga pada teks deskripsi di atas, manakah dua pernyataan yang sesuai dengan informasi tersurat tentang wahana Zip Bike? (Pilihlah dua jawaban yang benar!)",
+                options: [
+                    { key: 'A', text: "Zip Bike dimainkan dengan cara meluncurkan sepeda gantung di atas tali baja yang kuat." },
+                    { key: 'B', text: "Petugas selalu memasang alat pengaman tubuh agar keamanan wahana tersebut terjamin." },
+                    { key: 'C', text: "Sepeda gantung tersebut bergerak cepat menyeberangi area lembah di hutan pinus Lembang." }
+                ],
+                correctKeys: ['A', 'B']
+            },
+
+            // SOAL 3: Kategori (Tabel 3 Kolom: Pernyataan, Benar, Salah)
+            {
+                id: 3,
+                type: 'CATEGORY',
+                stimulus: STIMULUS_BUDI,
+                prompt: "Berdasarkan keseluruhan isi teks deskripsi di atas, tentukan apakah setiap pernyataan berikut sesuai (Benar) atau tidak sesuai (Salah) dengan amanat yang ingin disampaikan penulis!",
+                statements: [
+                    { text: "Kita harus memiliki keberanian untuk mencoba wahana atau hal baru yang bermanfaat.", correct: "Benar" },
+                    { text: "Kita harus senantiasa menjaga serta menyanyangi keindahan alam di lingkungan sekitar kita.", correct: "Benar" },
+                    { text: "Kita sebaiknya memilih kegiatan glamping daripada mencoba wahana permainan yang berbahaya.", correct: "Salah" }
+                ]
+            },
+
+            // SOAL 4 s.d. 30: Soal TKA Kelas 6 SD Variatif
+            {
+                id: 4,
+                type: 'MC',
+                prompt: "Hasil dari operasi hitung 250 + 1.250 : 25 - 45 adalah ...",
+                options: [
+                    { key: 'A', text: "255" },
+                    { key: 'B', text: "265" },
+                    { key: 'C', text: "275" },
+                    { key: 'D', text: "285" }
+                ],
+                correctKey: 'A'
+            },
+            {
+                id: 5,
+                type: 'MC',
+                prompt: "Kelipatan Persekutuan Terkecil (KPK) dari bilangan 24, 36, dan 48 dalam bentuk faktorisasi prima adalah ...",
+                options: [
+                    { key: 'A', text: "2² × 3²" },
+                    { key: 'B', text: "2³ × 3²" },
+                    { key: 'C', text: "2⁴ × 3²" },
+                    { key: 'D', text: "2⁴ × 3³" }
+                ],
+                correctKey: 'C'
+            },
+            {
+                id: 6,
+                type: 'MCMA',
+                prompt: "Perhatikan sifat-sifat bangun datar berikut! Manakah dua sifat yang dimiliki oleh bangun belah ketupat? (Pilihlah dua jawaban yang benar!)",
+                options: [
+                    { key: 'A', text: "Memiliki empat sisi yang sama panjang." },
+                    { key: 'B', text: "Kedua diagonalnya saling berpotongan tegak lurus." },
+                    { key: 'C', text: "Memiliki empat sudut yang semuanya siku-siku." }
+                ],
+                correctKeys: ['A', 'B']
+            },
+            {
+                id: 7,
+                type: 'CATEGORY',
+                prompt: "Tentukan kebenaran pernyataan mengenai sistem tata surya berikut!",
+                statements: [
+                    { text: "Planet Jupiter merupakan planet terbesar dalam sistem tata surya kita.", correct: "Benar" },
+                    { text: "Matahari bergerak mengelilingi bumi dalam waktu 24 jam.", correct: "Salah" },
+                    { text: "Planet Mars sering dijuluki sebagai planet merah.", correct: "Benar" }
+                ]
+            },
+            {
+                id: 8,
+                type: 'MC',
+                prompt: "Sebuah akuarium berbentuk kubus memiliki panjang rusuk 80 cm. Volume air yang dibutuhkan untuk mengisi akuarium tersebut hingga penuh adalah ... liter.",
+                options: [
+                    { key: 'A', text: "512" },
+                    { key: 'B', text: "640" },
+                    { key: 'C', text: "51,2" },
+                    { key: 'D', text: "64,0" }
+                ],
+                correctKey: 'A'
+            },
+            {
+                id: 9,
+                type: 'MC',
+                prompt: "Bentuk adaptasi pohon jati pada musim kemarau untuk mengurangi penguapan air adalah ...",
+                options: [
+                    { key: 'A', text: "Menggulungkan daunnya" },
+                    { key: 'B', text: "Menggugurkan daunnya (meranggas)" },
+                    { key: 'C', text: "Mempertebal lapisan batangnya" },
+                    { key: 'D', text: "Memanjangkan akar tunggangnya" }
+                ],
+                correctKey: 'B'
+            },
+            {
+                id: 10,
+                type: 'MCMA',
+                prompt: "Manakah dua kegiatan manusia yang dapat menyebabkan terjadinya erosi dan tanah longsor di daerah perbukitan? (Pilihlah dua jawaban yang benar!)",
+                options: [
+                    { key: 'A', text: "Penebangan pohon di hutan secara liar tanpa tebang pilih." },
+                    { key: 'B', text: "Membuka lahan pertanian di lereng miring tanpa sistem terasering." },
+                    { key: 'C', text: "Melakukan penanaman kembali hutan yang gundul (reboisasi)." }
+                ],
+                correctKeys: ['A', 'B']
+            },
+            {
+                id: 11,
+                type: 'MC',
+                prompt: "Lambang Kepala Banteng pada perisai burung Garuda Pancasila melambangkan sila yang berbunyi ...",
+                options: [
+                    { key: 'A', text: "Ketuhanan Yang Maha Esa" },
+                    { key: 'B', text: "Kemanusiaan yang adil dan beradab" },
+                    { key: 'C', text: "Persatuan Indonesia" },
+                    { key: 'D', text: "Kerakyatan yang dipimpin oleh hikmat kebijaksanaan dalam permusyawaratan/perwakilan" }
+                ],
+                correctKey: 'D'
+            },
+            {
+                id: 12,
+                type: 'CATEGORY',
+                prompt: "Tentukan kebenaran dari pernyataan mengenai perubahan wujud benda berikut!",
+                statements: [
+                    { text: "Mencair adalah peristiwa perubahan wujud dari benda padat menjadi cair.", correct: "Benar" },
+                    { text: "Menyublim adalah peristiwa perubahan wujud dari benda gas menjadi cair.", correct: "Salah" },
+                    { text: "Mengembun terjadi ketika uap air melepaskan kalor menjadi titik-titik air.", correct: "Benar" }
+                ]
+            },
+            {
+                id: 13,
+                type: 'MC',
+                prompt: "Lawan kata (antonim) dari kata 'ekstrem' dalam bacaan petualangan adalah ...",
+                options: [
+                    { key: 'A', text: "Biasa atau wajar" },
+                    { key: 'B', text: "Sangat berbahaya" },
+                    { key: 'C', text: "Terlalu tinggi" },
+                    { key: 'D', text: "Luar biasa" }
+                ],
+                correctKey: 'A'
+            },
+            {
+                id: 14,
+                type: 'MC',
+                prompt: "Pak Doni memanen hasil sawah sebanyak 2,5 ton beras. Sebanyak 15 kuintal dijual ke pedagang. Sisa beras Pak Doni sekarang adalah ... kg.",
+                options: [
+                    { key: 'A', text: "1.000" },
+                    { key: 'B', text: "100" },
+                    { key: 'C', text: "10" },
+                    { key: 'D', text: "500" }
+                ],
+                correctKey: 'A'
+            },
+            {
+                id: 15,
+                type: 'MCMA',
+                prompt: "Manakah dua organ pencernaan manusia yang menghasilkan enzim untuk mencerna protein? (Pilihlah dua jawaban yang benar!)",
+                options: [
+                    { key: 'A', text: "Lambung (menghasilkan enzim pepsin)" },
+                    { key: 'B', text: "Pankreas (menghasilkan enzim tripsin)" },
+                    { key: 'C', text: "Usus Besar (menyerap sisa air)" }
+                ],
+                correctKeys: ['A', 'B']
+            },
+            {
+                id: 16,
+                type: 'MC',
+                prompt: "Tokoh proklamator kemerdekaan Indonesia yang mendampingi Ir. Soekarno membacakan teks proklamasi adalah ...",
+                options: [
+                    { key: 'A', text: "Drs. Mohammad Hatta" },
+                    { key: 'B', text: "Sutan Sjahrir" },
+                    { key: 'C', text: "Mr. Ahmad Soebardjo" },
+                    { key: 'D', text: "Sayuti Melik" }
+                ],
+                correctKey: 'A'
+            },
+            {
+                id: 17,
+                type: 'CATEGORY',
+                prompt: "Tentukan kebenaran mengenai kesetaraan nilai pecahan berikut!",
+                statements: [
+                    { text: "Pecahan biasa 3/4 memiliki nilai yang sama dengan desimal 0,75.", correct: "Benar" },
+                    { text: "Pecahan biasa 2/5 memiliki nilai yang sama dengan 40%.", correct: "Benar" },
+                    { text: "Pecahan 1/2 nilainya lebih kecil dibandingkan pecahan 1/4.", correct: "Salah" }
+                ]
+            },
+            {
+                id: 18,
+                type: 'MC',
+                prompt: "Candi Borobudur yang terletak di Magelang merupakan peninggalan bersejarah dari kerajaan bercorak ...",
+                options: [
+                    { key: 'A', text: "Buddha" },
+                    { key: 'B', text: "Hindu" },
+                    { key: 'C', text: "Islam" },
+                    { key: 'D', text: "Konghucu" }
+                ],
+                correctKey: 'A'
+            },
+            {
+                id: 19,
+                type: 'MC',
+                prompt: "Perubahan bentuk energi yang terjadi pada alat pengering rambut (hair dryer) saat dinyalakan adalah ...",
+                options: [
+                    { key: 'A', text: "Energi listrik menjadi energi gerak dan energi panas" },
+                    { key: 'B', text: "Energi listrik menjadi energi kimia dan energi cahaya" },
+                    { key: 'C', text: "Energi gerak menjadi energi panas dan energi bunyi" },
+                    { key: 'D', text: "Energi potensial menjadi energi listrik dan gerak" }
+                ],
+                correctKey: 'A'
+            },
+            {
+                id: 20,
+                type: 'MCMA',
+                prompt: "Manakah dua contoh hewan yang berkembang biak dengan cara ovovivipar (bertelur sekaligus melahirkan)? (Pilihlah dua jawaban yang benar!)",
+                options: [
+                    { key: 'A', text: "Ular Boa dan Ular Kadut" },
+                    { key: 'B', text: "Ikan Hiu dan Ikan Pari" },
+                    { key: 'C', text: "Sapi dan Kambing" }
+                ],
+                correctKeys: ['A', 'B']
+            },
+            {
+                id: 21,
+                type: 'MC',
+                prompt: "Diketahui skala sebuah peta adalah 1 : 500.000. Jika jarak dua kota pada peta adalah 4 cm, maka jarak sebenarnya kedua kota tersebut adalah ... km.",
+                options: [
+                    { key: 'A', text: "20" },
+                    { key: 'B', text: "200" },
+                    { key: 'C', text: "2" },
+                    { key: 'D', text: "50" }
+                ],
+                correctKey: 'A'
+            },
+            {
+                id: 22,
+                type: 'CATEGORY',
+                prompt: "Tentukan kebenaran mengenai tugas lembaga-lembaga negara di Indonesia berikut!",
+                statements: [
+                    { text: "Presiden memegang kekuasaan pemerintahan menurut Undang-Undang Dasar 1945.", correct: "Benar" },
+                    { text: "Dewan Perwakilan Rakyat (DPR) memiliki fungsi legislasi membuat undang-undang.", correct: "Benar" },
+                    { text: "Mahkamah Agung bertugas menguji undang-undang terhadap UUD 1945.", correct: "Salah" }
+                ]
+            },
+            {
+                id: 23,
+                type: 'MC',
+                prompt: "Bagian organ pernapasan manusia di dalam paru-paru yang berfungsi sebagai tempat pertukaran gas oksigen dan karbon dioksida adalah ...",
+                options: [
+                    { key: 'A', text: "Alveolus" },
+                    { key: 'B', text: "Bronkus" },
+                    { key: 'C', text: "Trakea" },
+                    { key: 'D', text: "Laring" }
+                ],
+                correctKey: 'A'
+            },
+            {
+                id: 24,
+                type: 'MC',
+                prompt: "Salah satu tujuan utama organisasi ASEAN didirikan pada tanggal 8 Agustus 1967 adalah untuk ...",
+                options: [
+                    { key: 'A', text: "Meningkatkan kerja sama ekonomi, sosial, dan budaya di kawasan Asia Tenggara" },
+                    { key: 'B', text: "Membentuk pakta pertahanan militer bersama untuk berperang" },
+                    { key: 'C', text: "Menguasai jalur perdagangan laut internasional" },
+                    { key: 'D', text: "Menyatukan mata uang seluruh negara di Asia Tenggara" }
+                ],
+                correctKey: 'A'
+            },
+            {
+                id: 25,
+                type: 'MCMA',
+                prompt: "Manakah dua sikap yang mencerminkan upaya melestarikan kebudayaan daerah di Indonesia? (Pilihlah dua jawaban yang benar!)",
+                options: [
+                    { key: 'A', text: "Mempelajari seni tari dan alat musik tradisional daerah." },
+                    { key: 'B', text: "Mengadakan pertunjukan festival budaya daerah secara rutin." },
+                    { key: 'C', text: "Meremehkan kebudayaan daerah lain karena merasa budayanya paling hebat." }
+                ],
+                correctKeys: ['A', 'B']
+            },
+            {
+                id: 26,
+                type: 'MC',
+                prompt: "Rata-rata nilai ulangan matematika 5 orang siswa adalah 80. Jika nilai Budi yang mendapat 92 digabungkan, maka rata-rata nilai keenam siswa menjadi ...",
+                options: [
+                    { key: 'A', text: "82" },
+                    { key: 'B', text: "84" },
+                    { key: 'C', text: "85" },
+                    { key: 'D', text: "86" }
+                ],
+                correctKey: 'A'
+            },
+            {
+                id: 27,
+                type: 'CATEGORY',
+                prompt: "Tentukan kebenaran mengenai sumber energi alternatif dan energi fosil berikut!",
+                statements: [
+                    { text: "Cahaya matahari merupakan salah satu sumber energi terbarukan yang ramah lingkungan.", correct: "Benar" },
+                    { text: "Batu bara dan minyak bumi dapat diperbarui kembali dalam waktu singkat.", correct: "Salah" },
+                    { text: "Energi angin dapat dimanfaatkan untuk memutar turbin pembangkit listrik.", correct: "Benar" }
+                ]
+            },
+            {
+                id: 28,
+                type: 'MC',
+                prompt: "Garis khatulistiwa (ekuator) melintasi wilayah Indonesia dan melewati salah satu ibu kota provinsi yaitu kota ...",
+                options: [
+                    { key: 'A', text: "Pontianak" },
+                    { key: 'B', text: "Padang" },
+                    { key: 'C', text: "Surakarta" },
+                    { key: 'D', text: "Manado" }
+                ],
+                correctKey: 'A'
+            },
+            {
+                id: 29,
+                type: 'MC',
+                prompt: "Fungsi utama bagian akar pada tumbuhan hijau adalah untuk ...",
+                options: [
+                    { key: 'A', text: "Menyerap air dan zat hara dari dalam tanah serta memperkokoh berdirinya tumbuhan" },
+                    { key: 'B', text: "Tempat utama berlangsungnya proses fotosintesis dengan bantuan cahaya matahari" },
+                    { key: 'C', text: "Alat perkembangbiakan generatif utama pada tumbuhan berbiji" },
+                    { key: 'D', text: "Tempat keluar masuknya udara pernapasan melalui stomata" }
+                ],
+                correctKey: 'A'
+            },
+            {
+                id: 30,
+                type: 'MCMA',
+                prompt: "Manakah dua tindakan penghematan energi listrik dan air yang tepat dilakukan di lingkungan sekolah? (Pilihlah dua jawaban yang benar!)",
+                options: [
+                    { key: 'A', text: "Mematikan lampu ruang kelas saat siang hari yang sudah terang." },
+                    { key: 'B', text: "Menutup rapat keran air setelah selesai mencuci tangan." },
+                    { key: 'C', text: "Membiarkan kipas angin dan proyektor tetap menyala saat jam istirahat." }
+                ],
+                correctKeys: ['A', 'B']
+            }
+        ];
+
+        // ==================== FUNGSI LOGIN & VALIDASI TOKEN ====================
+        function handleLogin(e) {
+            e.preventDefault();
+            const nama = document.getElementById('input-nama').value.trim();
+            const nisn = document.getElementById('input-nisn').value.trim();
+            const token = document.getElementById('input-token').value.trim();
+            const errorAlert = document.getElementById('error-alert');
+
+            // Validasi Token: Harus "I LIKE"
+            if (token.toUpperCase() !== 'I LIKE') {
+                errorAlert.classList.remove('hidden');
+                return;
+            }
+
+            errorAlert.classList.add('hidden');
+            studentData.nama = nama;
+            studentData.nisn = nisn;
+
+            // Tampilkan Pop-up Petunjuk
+            document.getElementById('confirm-nama').innerText = nama;
+            document.getElementById('confirm-nisn').innerText = nisn;
+            document.getElementById('modal-petunjuk').classList.remove('hidden');
+        }
+
+        // ==================== MULAI UJIAN ====================
+        function startExam() {
+            document.getElementById('modal-petunjuk').classList.add('hidden');
+            document.getElementById('page-login').classList.add('hidden');
+            document.getElementById('footer-watermark').classList.add('hidden');
+            document.getElementById('page-exam').classList.remove('hidden');
+
+            document.getElementById('exam-user-nama').innerText = studentData.nama;
+            document.getElementById('exam-user-nisn').innerText = "NISN: " + studentData.nisn;
+
+            renderNavGrid();
+            loadQuestion(0);
+            startTimer();
+        }
+
+        // ==================== TIMER 75 MENIT ====================
+        function startTimer() {
+            const display = document.getElementById('timer-display');
+            timerInterval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    calculateAndFinishExam();
+                    return;
+                }
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                display.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // ==================== NAVIGASI NOMOR SOAL 1-30 ====================
+        function renderNavGrid() {
+            const gridContainer = document.getElementById('grid-nav');
+            gridContainer.innerHTML = '';
+
+            for (let i = 0; i < 30; i++) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.setAttribute('id', `nav-btn-${i}`);
+                btn.innerText = i + 1;
+                btn.onclick = () => loadQuestion(i);
+                gridContainer.appendChild(btn);
+            }
+            updateNavGridColors();
+        }
+
+        function updateNavGridColors() {
+            for (let i = 0; i < 30; i++) {
+                const btn = document.getElementById(`nav-btn-${i}`);
+                if (!btn) continue;
+
+                const isCurrent = (i === currentQuestionIndex);
+                const isDoubt = userDoubts[i];
+                const isAnswered = checkIsAnswered(i);
+
+                // Warna berbeda untuk status: Belum (abu-abu), Sudah dikerjakan (hijau), Ragu-ragu (kuning), Sedang dibuka (biru)
+                let colorClass = "bg-slate-200 text-slate-700 hover:bg-slate-300 border-slate-300";
+
+                if (isCurrent) {
+                    colorClass = "bg-blue-600 text-white border-blue-700 ring-2 ring-blue-300 font-black";
+                } else if (isDoubt) {
+                    colorClass = "bg-amber-400 text-slate-900 border-amber-500 font-bold";
+                } else if (isAnswered) {
+                    colorClass = "bg-emerald-500 text-white border-emerald-600 font-bold";
+                }
+
+                btn.className = `w-full h-9 text-xs rounded-lg border transition flex items-center justify-center shadow-2xs ${colorClass}`;
+            }
+        }
+
+        function checkIsAnswered(index) {
+            const ans = userAnswers[index];
+            if (ans === null || ans === undefined) return false;
+
+            const qType = questionsDB[index].type;
+            if (qType === 'MC') {
+                return ans !== null;
+            } else if (qType === 'MCMA') {
+                return Array.isArray(ans) && ans.length > 0;
+            } else if (qType === 'CATEGORY') {
+                // Terjawab jika ketiga pernyataan sudah dipilih Benar/Salah
+                return typeof ans === 'object' && Object.keys(ans).length === 3;
+            }
+            return false;
+        }
+
+        // ==================== TAMPILKAN SOAL ====================
+        function loadQuestion(index) {
+            currentQuestionIndex = index;
+            const q = questionsDB[index];
+
+            document.getElementById('current-q-num').innerText = index + 1;
+            
+            // Label Tipe Soal
+            const typeBadge = document.getElementById('q-type-badge');
+            if (q.type === 'MC') typeBadge.innerText = "Pilihan Ganda";
+            else if (q.type === 'MCMA') typeBadge.innerText = "Pilihan Ganda Kompleks (MCMA)";
+            else if (q.type === 'CATEGORY') typeBadge.innerText = "Pilihan Ganda Kategori";
+
+            // Stimulus Bacaan
+            const stimBox = document.getElementById('stimulus-container');
+            if (q.stimulus) {
+                document.getElementById('stimulus-title').innerText = q.stimulus.title || '';
+                document.getElementById('stimulus-text').innerHTML = q.stimulus.text || '';
+                document.getElementById('stimulus-source').innerHTML = q.stimulus.source || '';
+                stimBox.classList.remove('hidden');
+            } else {
+                stimBox.classList.add('hidden');
+            }
+
+            // Pokok Soal
+            document.getElementById('question-prompt').innerHTML = q.prompt;
+
+            // Opsi Jawaban
+            const optContainer = document.getElementById('options-container');
+            optContainer.innerHTML = '';
+
+            if (q.type === 'MC') {
+                renderMCOptions(q, optContainer, index);
+            } else if (q.type === 'MCMA') {
+                renderMCMAOptions(q, optContainer, index);
+            } else if (q.type === 'CATEGORY') {
+                renderCategoryTable(q, optContainer, index);
+            }
+
+            // Tampilan Tombol Ragu-ragu
+            const doubtBtn = document.getElementById('btn-doubt');
+            if (userDoubts[index]) {
+                doubtBtn.className = "px-4 py-2.5 bg-amber-500 text-white font-bold rounded-xl text-xs sm:text-sm transition flex items-center gap-2 border border-amber-600 shadow-sm";
+            } else {
+                doubtBtn.className = "px-4 py-2.5 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold rounded-xl text-xs sm:text-sm transition flex items-center gap-2 border border-amber-300 shadow-sm";
+            }
+
+            // Tombol Lewati & Tombol Selesai pada soal terakhir (No. 30)
+            const btnLewati = document.getElementById('btn-lewati');
+            const btnFinish = document.getElementById('btn-finish');
+
+            if (index === 29) {
+                btnLewati.classList.add('hidden');
+                btnFinish.classList.remove('hidden');
+            } else {
+                btnLewati.classList.remove('hidden');
+                btnFinish.classList.add('hidden');
+            }
+
+            updateNavGridColors();
+        }
+
+        // 1. Opsi Pilihan Ganda (Bulat/Lingkaran berisi A/B/C/D yang berubah warna saat diklik)
+        function renderMCOptions(q, container, qIndex) {
+            const currentAns = userAnswers[qIndex];
+
+            q.options.forEach(opt => {
+                const isSelected = (currentAns === opt.key);
+                const wrapper = document.createElement('div');
+                wrapper.className = `flex items-center gap-3.5 p-3.5 rounded-xl border cursor-pointer transition no-select ${
+                    isSelected 
+                    ? 'bg-blue-50 border-blue-500 text-blue-950 shadow-xs' 
+                    : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-800'
+                }`;
+                wrapper.onclick = () => {
+                    userAnswers[qIndex] = opt.key;
+                    loadQuestion(qIndex);
+                };
+
+                // Lingkaran berisi huruf A/B/C/D
+                const circle = document.createElement('div');
+                circle.className = `w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 border transition ${
+                    isSelected 
+                    ? 'bg-blue-600 text-white border-blue-600 shadow-xs' 
+                    : 'bg-slate-100 text-slate-700 border-slate-300'
+                }`;
+                circle.innerText = opt.key;
+
+                const text = document.createElement('div');
+                text.className = "flex-grow";
+                text.innerText = opt.text;
+
+                wrapper.appendChild(circle);
+                wrapper.appendChild(text);
+                container.appendChild(wrapper);
+            });
+        }
+
+        // 2. Opsi MCMA (Kotak di depan opsi, muncul centang jika diklik)
+        function renderMCMAOptions(q, container, qIndex) {
+            let currentAns = userAnswers[qIndex] || [];
+
+            q.options.forEach(opt => {
+                const isChecked = currentAns.includes(opt.key);
+                const wrapper = document.createElement('div');
+                wrapper.className = `flex items-center gap-3.5 p-3.5 rounded-xl border cursor-pointer transition no-select ${
+                    isChecked 
+                    ? 'bg-blue-50 border-blue-500 text-blue-950 shadow-xs' 
+                    : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-800'
+                }`;
+                wrapper.onclick = () => {
+                    let updated = userAnswers[qIndex] ? [...userAnswers[qIndex]] : [];
+                    if (updated.includes(opt.key)) {
+                        updated = updated.filter(k => k !== opt.key);
+                    } else {
+                        updated.push(opt.key);
+                    }
+                    userAnswers[qIndex] = updated.length > 0 ? updated : null;
+                    loadQuestion(qIndex);
+                };
+
+                // Kotak Centang
+                const squareBox = document.createElement('div');
+                squareBox.className = `w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 border-2 transition ${
+                    isChecked 
+                    ? 'bg-blue-600 border-blue-600 text-white' 
+                    : 'bg-white border-slate-400 text-transparent'
+                }`;
+                squareBox.innerHTML = `<i class="fa-solid fa-check text-sm"></i>`;
+
+                const text = document.createElement('div');
+                text.className = "flex-grow";
+                text.innerText = opt.text;
+
+                wrapper.appendChild(squareBox);
+                wrapper.appendChild(text);
+                container.appendChild(wrapper);
+            });
+        }
+
+        // 3. Opsi Kategori (Tabel 3 Kolom: Pernyataan, Benar, Salah dengan tanda centang)
+        function renderCategoryTable(q, container, qIndex) {
+            let currentAns = userAnswers[qIndex] || {};
+
+            const tableWrapper = document.createElement('div');
+            tableWrapper.className = "overflow-x-auto rounded-xl border border-slate-300";
+
+            const table = document.createElement('table');
+            table.className = "w-full border-collapse text-left exam-font";
+            
+            table.innerHTML = `
+                <thead>
+                    <tr class="bg-slate-100 text-slate-900 border-b border-slate-300 font-bold">
+                        <th class="p-3.5 border-r border-slate-300">Pernyataan</th>
+                        <th class="p-3.5 text-center w-24 border-r border-slate-300">Benar</th>
+                        <th class="p-3.5 text-center w-24">Salah</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 bg-white"></tbody>
+            `;
+
+            const tbody = table.querySelector('tbody');
+
+            q.statements.forEach((stmt, idx) => {
+                const tr = document.createElement('tr');
+                const selectedVal = currentAns[idx]; // 'Benar' atau 'Salah'
+
+                tr.innerHTML = `
+                    <td class="p-3.5 border-r border-slate-200 text-slate-800">${stmt.text}</td>
+                    <td class="p-3.5 text-center border-r border-slate-200 cursor-pointer hover:bg-blue-50 transition select-none" onclick="selectCategory(${qIndex}, ${idx}, 'Benar')">
+                        <div class="w-7 h-7 mx-auto rounded-md border-2 flex items-center justify-center transition ${
+                            selectedVal === 'Benar' 
+                            ? 'bg-emerald-600 border-emerald-600 text-white' 
+                            : 'bg-white border-slate-300 text-transparent'
+                        }">
+                            <i class="fa-solid fa-check text-sm"></i>
+                        </div>
+                    </td>
+                    <td class="p-3.5 text-center cursor-pointer hover:bg-blue-50 transition select-none" onclick="selectCategory(${qIndex}, ${idx}, 'Salah')">
+                        <div class="w-7 h-7 mx-auto rounded-md border-2 flex items-center justify-center transition ${
+                            selectedVal === 'Salah' 
+                            ? 'bg-rose-600 border-rose-600 text-white' 
+                            : 'bg-white border-slate-300 text-transparent'
+                        }">
+                            <i class="fa-solid fa-check text-sm"></i>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            tableWrapper.appendChild(table);
+            container.appendChild(tableWrapper);
+        }
+
+        function selectCategory(qIndex, stmtIdx, value) {
+            let currentAns = userAnswers[qIndex] ? { ...userAnswers[qIndex] } : {};
+            currentAns[stmtIdx] = value;
+            userAnswers[qIndex] = currentAns;
+            loadQuestion(qIndex);
+        }
+
+        // ==================== AKSI TOMBOL NAVIGASI ====================
+        function nextQuestion() {
+            if (currentQuestionIndex < 29) {
+                loadQuestion(currentQuestionIndex + 1);
+            }
+        }
+
+        function toggleDoubt() {
+            userDoubts[currentQuestionIndex] = !userDoubts[currentQuestionIndex];
+            loadQuestion(currentQuestionIndex);
+        }
+
+        // ==================== SELESAI & PERHITUNGAN NILAI ====================
+        function confirmFinishExam() {
+            document.getElementById('modal-confirm-finish').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('modal-confirm-finish').classList.add('hidden');
+        }
+
+        function calculateAndFinishExam() {
+            closeConfirmModal();
+            if (timerInterval) clearInterval(timerInterval);
+
+            let totalCorrect = 0;
+
+            questionsDB.forEach((q, idx) => {
+                const uAns = userAnswers[idx];
+
+                if (q.type === 'MC') {
+                    if (uAns === q.correctKey) {
+                        totalCorrect++;
+                    }
+                } else if (q.type === 'MCMA') {
+                    if (Array.isArray(uAns)) {
+                        const isSameLength = uAns.length === q.correctKeys.length;
+                        const allMatch = q.correctKeys.every(k => uAns.includes(k));
+                        if (isSameLength && allMatch) {
+                            totalCorrect++;
+                        }
+                    }
+                } else if (q.type === 'CATEGORY') {
+                    // Aturan Kategori: 3 pernyataan harus benar semua agar mendapat nilai
+                    if (uAns && typeof uAns === 'object') {
+                        let isAllThreeCorrect = true;
+                        q.statements.forEach((stmt, sIdx) => {
+                            if (uAns[sIdx] !== stmt.correct) {
+                                isAllThreeCorrect = false;
+                            }
+                        });
+                        if (isAllThreeCorrect) {
+                            totalCorrect++;
+                        }
+                    }
+                }
+            });
+
+            // Rumus: (Jumlah jawaban benar x 100) / 30 dengan 2 angka desimal
+            const finalScore = (totalCorrect * 100) / 30;
+            const formattedScore = finalScore.toFixed(2);
+
+            // Tampilkan Halaman Hasil
+            document.getElementById('page-exam').classList.add('hidden');
+            document.getElementById('page-result').classList.remove('hidden');
+
+            document.getElementById('result-score').innerText = formattedScore;
+            document.getElementById('result-correct').innerText = totalCorrect;
+            document.getElementById('result-nama').innerText = studentData.nama;
+            document.getElementById('result-nisn').innerText = studentData.nisn;
+        }
+    </script>
+</body>
+</html>
